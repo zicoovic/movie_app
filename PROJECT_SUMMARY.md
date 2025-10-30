@@ -1,5 +1,30 @@
 # 🎬 Movie App - Project Summary
 
+## 🔄 HOW TO RESUME THIS PROJECT (Important!)
+
+**If your computer crashes, you switch laptops, or start a new chat, tell Claude:**
+
+```
+"We worked together before. I'm learning Flutter. Keep explanations simple.
+This is my movie app project - check PROJECT_SUMMARY.md for our progress.
+We're following clean architecture with max 100 lines per file and we do the ui design 100% as the screen looks like .
+Continue from where we left off."
+```
+
+**Working Style Reminders:**
+- ✅ Explain concepts BEFORE coding
+- ✅ Keep code simple (all devs can understand)
+- ✅ Max 100 lines per file
+- ✅ follow the ui design as the screen looks like
+- ✅ Update PROJECT_SUMMARY.md after each step
+- ✅ Tell me when to commit/push to Git
+- ✅ Follow the 11 points from our first discussion
+
+**Current Branch:** `develop`
+**Last Commit:** `d73cbf2 - feat: Add Dependency Injection and Hive caching setup`
+
+---
+
 ## 📱 Project Overview
 A Flutter movie application using TMDB API with focus on clean architecture, professional practices, and learning modern Flutter development patterns.
 
@@ -7,6 +32,7 @@ A Flutter movie application using TMDB API with focus on clean architecture, pro
 **Architecture:** Clean Architecture (Feature-based)
 **State Management:** Cubit (flutter_bloc)
 **API:** The Movie Database (TMDB)
+**TMDB API Key:** 29501a0da4990b898ff159bde85192f4 (stored in .env)
 
 ---
 
@@ -693,13 +719,32 @@ Before submission, verify:
 
 ---
 
+## 📋 The 11 Points We're Following
+
+1. ✅ **OOP + SOLID** - Using interfaces, single responsibility
+2. ✅ **Clean Architecture** - Data/Domain/Presentation layers, max 100 lines per file
+3. ⏳ **Cubit (State Management)** - Using flutter_bloc (will implement with features)
+4. ✅ **DI for HTTP** - get_it + Dio configured
+5. ✅ **Error Handler** - dartz Either<Failure, Data> pattern
+6. ⏳ **Git Flow** - develop branch, feature branches, descriptive commits
+7. ⏳ **Testing** - Unit tests + widget tests (later)
+8. ⏳ **CI/CD + Flavours** - Later phase
+9. ⏳ **Firebase** - Crashlytics + Analytics (later)
+10. ✅ **Theming** - Light/Dark with shared_preferences DONE
+11. 🔄 **Caching + Token** - Hive setup done, will use in repositories
+
+---
+
 ## 📋 Working Style Reminders
 
-- ✅ **Explain before coding** - I'll explain each concept
+- ✅ **Explain before coding** - Concepts first, code second
+- ✅ **Keep it simple** - Code all devs can understand
 - ✅ **Comments in code** - For learning reference
 - ✅ **You run Git commands** - I provide commands, you execute
+- ✅ **Max 100 lines per file** - Clean, readable code
+- ✅ **Follow the UI design** -  As the screen looks like
+- ✅ **Update PROJECT_SUMMARY.md** - After each major step
 - ✅ **Ask questions anytime** - No question is stupid!
-- ✅ **One feature at a time** - Master each before moving on
 
 ---
 

@@ -1,93 +1,141 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../../core/di/injection_container.dart';
 import '../cubit/movie_list_cubit.dart';
 import '../cubit/movie_list_state.dart';
-import '../widgets/movie_card.dart';
+import '../widgets/category_card.dart';
+import '../widgets/gradient_search_bar.dart';
+import '../widgets/horizontal_movie_list.dart';
 
-/// HomePage - Shows list of popular movies
+/// HomePage - Main screen matching Screen 3 design
 ///
-/// Features:
-/// 1. Displays movie cards in grid
-/// 2. Pagination (loads more on scroll)
-/// 3. Pull to refresh
-/// 4. Shows loading & error states
+/// Sections:
+/// 1. Search bar (gradient border)
+/// 2. Categories (Movies & Animes cards)
+/// 3. Most searched (horizontal movie list)
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => getIt<MovieListCubit>()..loadMovies(),
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Popular Movies'),
-          centerTitle: true,
-        ),
-        body: BlocBuilder<MovieListCubit, MovieListState>(
-          builder: (context, state) {
-            if (state is MovieListLoading) {
-              return const Center(child: CircularProgressIndicator());
-            }
+    // ✅ No BlocProvider here!
+    // MovieListCubit is provided by the router (app_router.dart)
+    return Scaffold(
+      body: SafeArea(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 16),
 
-            if (state is MovieListError) {
-              return Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+              // Title
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 24),
+                child: Text(
+                  'Search for a content',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 16),
+
+              // Search bar
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 24),
+                child: GradientSearchBar(),
+              ),
+
+              const SizedBox(height: 32),
+
+              // Categories title
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 24),
+                child: Text(
+                  'Categories.',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 16),
+
+              // Categories cards (Movies & Animes)
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+                child: Row(
                   children: [
-                    const Icon(Icons.error_outline, size: 64, color: Colors.red),
-                    const SizedBox(height: 16),
-                    Text(state.message),
-                    const SizedBox(height: 16),
-                    ElevatedButton(
-                      onPressed: () => context.read<MovieListCubit>().loadMovies(),
-                      child: const Text('Retry'),
+                    Expanded(
+                      child: CategoryCard(
+                        title: 'Movies',
+                        subtitle: '532 Titles',
+                        imageUrl: 'https://example.com/spiderman.png',
+                        gradientColors: const [
+                          Color(0xFF1E88E5),
+                          Color(0xFF42A5F5),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: CategoryCard(
+                        title: 'Animes',
+                        subtitle: '732 Titles',
+                        imageUrl: 'https://example.com/anime.png',
+                        gradientColors: const [
+                          Color(0xFFE53935),
+                          Color(0xFFFF6F00),
+                        ],
+                      ),
                     ),
                   ],
                 ),
-              );
-            }
+              ),
 
-            if (state is MovieListLoaded || state is MovieListLoadingMore) {
-              final movies = state is MovieListLoaded
-                  ? state.movies
-                  : (state as MovieListLoadingMore).currentMovies;
+              const SizedBox(height: 32),
 
-              return RefreshIndicator(
-                onRefresh: () => context.read<MovieListCubit>().refreshMovies(),
-                child: NotificationListener<ScrollNotification>(
-                  onNotification: (notification) {
-                    // Load more when scrolled to 80%
-                    if (notification.metrics.pixels >=
-                        notification.metrics.maxScrollExtent * 0.8) {
-                      context.read<MovieListCubit>().loadMoreMovies();
-                    }
-                    return false;
-                  },
-                  child: GridView.builder(
-                    padding: const EdgeInsets.all(16),
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      childAspectRatio: 0.7,
-                      crossAxisSpacing: 16,
-                      mainAxisSpacing: 16,
-                    ),
-                    itemCount: movies.length + (state is MovieListLoadingMore ? 1 : 0),
-                    itemBuilder: (context, index) {
-                      if (index == movies.length) {
-                        return const Center(child: CircularProgressIndicator());
-                      }
-                      return MovieCard(movie: movies[index]);
-                    },
+              // Most searched title
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 24),
+                child: Text(
+                  'Most searched.',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
-              );
-            }
+              ),
 
-            return const SizedBox();
-          },
+              const SizedBox(height: 16),
+
+              // Most searched movie list
+              Expanded(
+                child: BlocBuilder<MovieListCubit, MovieListState>(
+                  builder: (context, state) {
+                    if (state is MovieListLoading) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+
+                    if (state is MovieListError) {
+                      return Center(child: Text(state.message));
+                    }
+
+                    if (state is MovieListLoaded) {
+                      return HorizontalMovieList(movies: state.movies);
+                    }
+
+                    return const SizedBox();
+                  },
+                ),
+              ),
+            ],
+          ),
         ),
-      ),
     );
   }
 }

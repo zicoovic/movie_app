@@ -21,13 +21,20 @@ class MovieListCubit extends Cubit<MovieListState> {
 
   /// Load first page of movies
   Future<void> loadMovies() async {
+    print('🎬 MovieListCubit: loadMovies() called');
     emit(MovieListLoading());
+    print('🎬 MovieListCubit: Emitted MovieListLoading state');
 
     final result = await getPopularMovies(GetPopularMoviesParams(page: 1));
+    print('🎬 MovieListCubit: Got result from use case');
 
     result.fold(
-      (failure) => emit(MovieListError(failure.message)),
+      (failure) {
+        print('🎬 MovieListCubit: ERROR - ${failure.message}');
+        emit(MovieListError(failure.message));
+      },
       (movies) {
+        print('🎬 MovieListCubit: SUCCESS - Loaded ${movies.length} movies');
         _currentPage = 1;
         _allMovies.clear();
         _allMovies.addAll(movies);

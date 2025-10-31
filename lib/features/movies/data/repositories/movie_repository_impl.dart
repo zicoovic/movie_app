@@ -30,23 +30,32 @@ class MovieRepositoryImpl implements MovieRepository {
   }) async {
     try {
       // Step 1: Try cache first
+      print('📦 Repository: Checking cache for page $page');
       final cachedMovies = await localDataSource.getCachedPopularMovies(page);
+      print('📦 Repository: Cache HIT - Found ${cachedMovies.length} movies');
       return Right(cachedMovies);
-    } on CacheException {
+    } on CacheException catch (e) {
       // Step 2: Cache miss or expired, fetch from API
+      print('📦 Repository: Cache MISS - ${e.message}');
       try {
+        print('📦 Repository: Fetching from API...');
         final remoteMovies = await remoteDataSource.getPopularMovies(page);
+        print('📦 Repository: API returned ${remoteMovies.length} movies');
 
         // Step 3: Save to cache for next time
         await localDataSource.cachePopularMovies(remoteMovies, page);
+        print('📦 Repository: Saved to cache');
 
         return Right(remoteMovies);
       } on ServerException catch (e) {
+        print('📦 Repository: ServerException - ${e.message}');
         return Left(ServerFailure(e.message));
       } on NetworkException catch (e) {
+        print('📦 Repository: NetworkException - ${e.message}');
         return Left(NetworkFailure(e.message));
       }
     } catch (e) {
+      print('📦 Repository: Unexpected error - $e');
       return Left(ServerFailure('Unexpected error: $e'));
     }
   }

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'core/di/injection_container.dart';
+import 'core/routes/app_router.dart';
 import 'core/theme/app_theme.dart';
 import 'core/utils/hive_helper.dart';
-import 'features/movies/presentation/pages/home_page.dart' as movies;
 import 'features/theme/presentation/cubit/theme_cubit.dart';
 
 void main() async {
@@ -25,12 +25,11 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Provide ThemeCubit to the entire app
-    // Get SharedPreferences from DI container
     return BlocProvider(
       create: (_) => ThemeCubit(getIt()),
       child: BlocBuilder<ThemeCubit, ThemeMode>(
         builder: (context, themeMode) {
-          return MaterialApp(
+          return MaterialApp.router(
             debugShowCheckedModeBanner: false,
             title: 'Movie App',
 
@@ -39,7 +38,8 @@ class MainApp extends StatelessWidget {
             darkTheme: AppTheme.darkTheme,
             themeMode: themeMode, // Current theme from Cubit
 
-            home: const movies.HomePage(),
+            // Use go_router for navigation
+            routerConfig: AppRouter.router,
           );
         },
       ),

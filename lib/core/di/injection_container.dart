@@ -26,15 +26,15 @@ Future<void> setupDependencies() async {
 
   // Dio - HTTP client
   final dio = Dio();
-  getIt.registerLazySingleton(() => dio);
 
-  // DioClient - Configured HTTP client
-  getIt.registerLazySingleton(() => DioClient(getIt<Dio>()));
+  // DioClient - Configured HTTP client with base URL and interceptors
+  final dioClient = DioClient(dio);
+  getIt.registerLazySingleton(() => dioClient);
 
   // ==================== Data Sources ====================
 
   getIt.registerLazySingleton<MovieRemoteDataSource>(
-    () => MovieRemoteDataSourceImpl(dio: getIt<Dio>()),
+    () => MovieRemoteDataSourceImpl(dio: getIt<DioClient>().dio),
   );
 
   getIt.registerLazySingleton<MovieLocalDataSource>(

@@ -20,6 +20,7 @@ class MovieRemoteDataSourceImpl implements MovieRemoteDataSource {
   @override
   Future<List<MovieModel>> getPopularMovies(int page) async {
     try {
+      print('🌍 RemoteDataSource: Calling API for page $page');
       final response = await dio.get(
         ApiConstants.popularMovies,
         queryParameters: {
@@ -28,13 +29,16 @@ class MovieRemoteDataSourceImpl implements MovieRemoteDataSource {
         },
       );
 
+      print('🌍 RemoteDataSource: Got response with status ${response.statusCode}');
       if (response.statusCode == 200) {
         final results = response.data['results'] as List;
+        print('🌍 RemoteDataSource: Parsing ${results.length} movies');
         return results.map((json) => MovieModel.fromJson(json)).toList();
       } else {
         throw ServerException('Failed to load movies');
       }
     } on DioException catch (e) {
+      print('🌍 RemoteDataSource: DioException - ${e.type}');
       if (e.type == DioExceptionType.connectionTimeout ||
           e.type == DioExceptionType.receiveTimeout) {
         throw NetworkException('Connection timeout');
@@ -46,6 +50,7 @@ class MovieRemoteDataSourceImpl implements MovieRemoteDataSource {
         );
       }
     } catch (e) {
+      print('🌍 RemoteDataSource: Unexpected error - $e');
       throw ServerException('Unexpected error: $e');
     }
   }

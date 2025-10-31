@@ -6,14 +6,14 @@ import '../error/failures.dart';
 // This enforces a consistent pattern across the app
 
 /// Abstract class for UseCases that return a Future
-/// [Type] is the return type
+/// [T] is the return type
 /// [Params] is the parameters needed to execute the use case
-abstract class UseCase<type, Params> {
+abstract class UseCase<T, Params> {
   /// Execute the use case
-  /// Returns Either\<Failure, Type>
+  /// Returns Either<Failure, T>
   /// - Left: Failure (error case)
-  /// - Right: Type (success case)
-  Future<Either<Failure, Type>> call(Params params);
+  /// - Right: T (success case)
+  Future<Either<Failure, T>> call(Params params);
 }
 
 /// Used when a UseCase doesn't need any parameters

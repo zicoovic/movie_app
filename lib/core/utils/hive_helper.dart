@@ -1,4 +1,5 @@
 import 'package:hive_flutter/hive_flutter.dart';
+import '../../features/movies/data/models/movie_model.dart';
 
 // Hive Helper - Initialize and manage Hive boxes
 // A "box" is like a table in a database
@@ -12,6 +13,9 @@ class HiveHelper {
   static Future<void> init() async {
     // Initialize Hive with Flutter
     await Hive.initFlutter();
+
+    // Register adapters (teach Hive how to store our custom objects)
+    Hive.registerAdapter(MovieModelAdapter());
 
     // Open boxes (create if they don't exist)
     await Hive.openBox(moviesBox);

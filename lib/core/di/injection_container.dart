@@ -1,7 +1,15 @@
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
+import 'package:hive/hive.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../features/movies/data/datasources/movie_local_datasource.dart';
+import '../../features/movies/data/datasources/movie_remote_datasource.dart';
+import '../../features/movies/data/repositories/movie_repository_impl.dart';
+import '../../features/movies/domain/repositories/movie_repository.dart';
+import '../../features/movies/domain/usecases/get_popular_movies.dart';
+import '../../features/movies/presentation/cubit/movie_list_cubit.dart';
 import '../network/dio_client.dart';
+import '../utils/hive_helper.dart';
 
 // Service Locator - Register all dependencies here
 // Call setupDependencies() once in main()
@@ -23,16 +31,36 @@ Future<void> setupDependencies() async {
   // DioClient - Configured HTTP client
   getIt.registerLazySingleton(() => DioClient(getIt<Dio>()));
 
+  // ==================== Data Sources ====================
+
+  getIt.registerLazySingleton<MovieRemoteDataSource>(
+    () => MovieRemoteDataSourceImpl(dio: getIt<Dio>()),
+  );
+
+  getIt.registerLazySingleton<MovieLocalDataSource>(
+    () => MovieLocalDataSourceImpl(
+      moviesBox: Hive.box(HiveHelper.moviesBox),
+      movieDetailsBox: Hive.box(HiveHelper.movieDetailsBox),
+    ),
+  );
+
   // ==================== Repositories ====================
-  // TODO: Register repositories here when we create them
-  // Example: getIt.registerLazySingleton(() => MovieRepository(getIt()));
+
+  getIt.registerLazySingleton<MovieRepository>(
+    () => MovieRepositoryImpl(
+      remoteDataSource: getIt<MovieRemoteDataSource>(),
+      localDataSource: getIt<MovieLocalDataSource>(),
+    ),
+  );
 
   // ==================== Use Cases ====================
-  // TODO: Register use cases here when we create them
-  // Example: getIt.registerLazySingleton(() => GetPopularMovies(getIt()));
+
+  getIt.registerLazySingleton(() => GetPopularMovies(getIt<MovieRepository>()));
 
   // ==================== Cubits ====================
-  // Cubits are registered as factories (new instance each time)
-  // TODO: Register cubits here when we create them
-  // Example: getIt.registerFactory(() => MovieListCubit(getIt()));
+  // Cubits are factories (new instance each time)
+
+  getIt.registerFactory(() => MovieListCubit(
+    getPopularMovies: getIt<GetPopularMovies>(),
+  ));
 }

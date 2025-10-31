@@ -770,13 +770,25 @@ Before submission, verify:
    - Boxes opened: movies_box, movie_details_box
    - Ready to cache API responses
 
-### ⏳ Next Steps (After Rest):
-1. **Movie Domain Layer** - Create Movie entity (pure Dart class)
-2. **Movie Data Layer** - Create Movie model with JSON serialization
-3. **Movie Repository** - API calls + Caching logic
-4. **Movie List UI** - Build home screen with pagination
-5. **Onboarding Screen** - Simple UI matching design
-6. **Movie Details Screen** - Show movie info with cast
+### 🎬 Movie Feature - In Progress:
+9. **Movie Entity (Domain Layer)** - ✅ DONE
+   - [movie.dart](lib/features/movies/domain/entities/movie.dart) (68 lines)
+   - Pure Dart class matching TMDB API structure
+   - Fields: id, title, overview, posterPath, voteAverage, etc.
+   - Helper methods: fullPosterUrl, fullBackdropUrl, formattedRating
+   - Uses Equatable for easy comparison
+
+### ⏳ Next Steps (Continue Movie Feature):
+1. **Movie Model** - JSON serialization with json_serializable
+2. **Movie Repository Interface** - Define contract (domain layer)
+3. **GetPopularMovies UseCase** - Business logic for fetching movies
+4. **Remote DataSource** - API calls with Dio
+5. **Local DataSource** - Hive caching logic
+6. **Repository Implementation** - Cache-first strategy
+7. **MovieList Cubit** - State management with pagination
+8. **HomePage UI** - Movie cards with infinite scroll
+9. **Onboarding Screen** - Simple UI matching design
+10. **Movie Details Screen** - Show movie info with cast
 
 ### 📊 Assignment Requirements Status:
 1. ✅ **Light/Dark Theming** - COMPLETE (toggles, saves preference)
@@ -786,12 +798,39 @@ Before submission, verify:
 
 ### 📝 Files Created (All < 100 lines, following clean arch):
 - Core: 8 files (errors, network, theme, DI, utils)
-- Features: 1 file (theme cubit)
-- Total: ~350 lines of clean, readable code
+- Features: 2 files (theme cubit, movie entity)
+- Total: ~420 lines of clean, readable code
 
 ---
 
-**Last Updated:** 2025-10-30 (After DI + Hive Setup)
+## 📚 Important Learnings (Session Notes):
+
+### 🎓 API Exploration:
+- **TMDB API Endpoints:** We need only 2 endpoints for our 3 screens!
+  - `/movie/popular` → Home screen (movie list with pagination)
+  - `/movie/{id}` → Details screen (full movie info)
+- **Testing APIs:** Use Postman or browser to see JSON structure
+- **GET vs POST:** GET for fetching data, POST for sending data
+
+### 💾 Storage Strategy (Professional Best Practice):
+**Why use both Hive AND SharedPreferences?**
+- ✅ **SharedPreferences** → Simple settings (theme, onboarding flag)
+  - Fast for simple key-value pairs
+  - Built into Flutter, no setup needed
+- ✅ **Hive** → Complex data (movie lists, movie details)
+  - Optimized for large datasets (100s of movies)
+  - Handles complex objects easily
+- ✅ **Right Tool for Right Job** → Industry standard (Google, Netflix, Spotify)
+
+### 🏗️ Clean Architecture Flow:
+```
+Entity (domain) → Model (data) → Repository → UseCase → Cubit → UI
+Pure Dart        JSON + Hive     Cache+API    Logic     State   Widgets
+```
+
+---
+
+**Last Updated:** 2025-10-31 (Movie Entity Created)
 **Current Branch:** develop
-**Status:** Core infrastructure complete, tested and working
-**Next Step:** Push to GitHub, then start Movie feature tomorrow
+**Status:** Infrastructure complete, Movie feature started (1/10 steps done)
+**Next Session:** Continue with MovieModel (JSON serialization)

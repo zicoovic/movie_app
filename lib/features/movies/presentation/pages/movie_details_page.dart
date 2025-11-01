@@ -57,8 +57,8 @@ class MovieDetailsPage extends StatelessWidget {
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
                       colors: [
-                        Colors.black.withOpacity(0.3),
-                        Colors.black.withOpacity(0.9),
+                        Colors.black.withValues(alpha: 0.3),
+                        Colors.black.withValues(alpha: 0.9),
                       ],
                     ),
                   ),
@@ -102,7 +102,7 @@ class MovieDetailsPage extends StatelessWidget {
                                 Text(
                                   '${movie.releaseYear}\nMarvel Studios',
                                   style: TextStyle(
-                                    color: Colors.white.withOpacity(0.7),
+                                    color: Colors.white.withValues(alpha: 0.7),
                                     fontSize: 14,
                                   ),
                                 ),
@@ -141,7 +141,7 @@ class MovieDetailsPage extends StatelessWidget {
                   Text(
                     movie.overview,
                     style: TextStyle(
-                      color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.7),
+                      color: Theme.of(context).textTheme.bodyMedium?.color?.withValues(alpha: 0.7),
                       fontSize: 14,
                       height: 1.6,
                     ),

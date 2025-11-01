@@ -1,6 +1,5 @@
 import 'package:hive/hive.dart';
 import '../../../../core/error/exceptions.dart';
-import '../../../../core/utils/hive_helper.dart';
 import '../models/movie_model.dart';
 
 /// MovieLocalDataSource - Manages local caching with Hive

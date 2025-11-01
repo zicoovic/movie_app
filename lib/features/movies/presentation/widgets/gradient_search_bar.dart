@@ -46,7 +46,7 @@ class GradientSearchBar extends StatelessWidget {
           decoration: InputDecoration(
             hintText: 'Search for a content',
             hintStyle: TextStyle(
-              color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.5),
+              color: Theme.of(context).textTheme.bodyMedium?.color?.withValues(alpha: 0.5),
               fontSize: 14,
             ),
             prefixIcon: Icon(

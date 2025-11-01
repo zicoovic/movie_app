@@ -26,27 +26,15 @@ class OnboardingPage extends StatelessWidget {
               const TiltedPosters(),
 
               const Spacer(),
-
-              // Title
-              Text(
-                'Onboarding',
-                style: TextStyle(
-                  fontSize: 32,
-                  fontWeight: FontWeight.bold,
-                  color: Theme.of(context).textTheme.bodyLarge?.color,
-                ),
-              ),
-
               const SizedBox(height: 16),
-
-              // Subtitle
+              // title
               Text(
                 'Watch everything you want\nfor free!',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: 16,
-                  color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.7),
-                  height: 1.5,
+                  fontSize: 25,
+                  fontWeight: FontWeight.bold,
+                  color: Theme.of(context).textTheme.bodyLarge?.color,
                 ),
               ),
 

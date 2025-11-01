@@ -7,24 +7,66 @@ import '../../domain/entities/movie.dart';
 ///
 /// Shows movie posters horizontally with title and year
 /// Used in "Most searched" section (Screen 3)
-class HorizontalMovieList extends StatelessWidget {
+class HorizontalMovieList extends StatefulWidget {
   final List<Movie> movies;
+  final VoidCallback? onLoadMore;
+  final bool hasMore;
 
   const HorizontalMovieList({
     super.key,
     required this.movies,
+    this.onLoadMore,
+    this.hasMore = true,
   });
+
+  @override
+  State<HorizontalMovieList> createState() => _HorizontalMovieListState();
+}
+
+class _HorizontalMovieListState extends State<HorizontalMovieList> {
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_onScroll);
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _onScroll() {
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent * 0.8) {
+      if (widget.hasMore && widget.onLoadMore != null) {
+        widget.onLoadMore!();
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       height: 200,
       child: ListView.builder(
+        controller: _scrollController,
         scrollDirection: Axis.horizontal,
-        itemCount: movies.length,
+        itemCount: widget.movies.length + (widget.hasMore ? 1 : 0),
         padding: const EdgeInsets.symmetric(horizontal: 24),
         itemBuilder: (context, index) {
-          final movie = movies[index];
+          if (index >= widget.movies.length) {
+            return const Center(
+              child: Padding(
+                padding: EdgeInsets.all(16),
+                child: CircularProgressIndicator(),
+              ),
+            );
+          }
+
+          final movie = widget.movies[index];
           return _MoviePosterItem(
             movie: movie,
             onTap: () => context.push('/details', extra: movie),
@@ -86,8 +128,8 @@ class _MoviePosterItem extends StatelessWidget {
               movie.title,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: const TextStyle(
-                color: Colors.white,
+              style: TextStyle(
+                color: Theme.of(context).textTheme.bodyLarge?.color,
                 fontSize: 12,
                 fontWeight: FontWeight.w600,
               ),
@@ -96,8 +138,8 @@ class _MoviePosterItem extends StatelessWidget {
             // Year
             Text(
               movie.releaseYear,
-              style: const TextStyle(
-                color: Colors.white54,
+              style: TextStyle(
+                color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.6),
                 fontSize: 11,
               ),
             ),

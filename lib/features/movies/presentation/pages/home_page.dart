@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../theme/presentation/cubit/theme_cubit.dart';
 import '../cubit/movie_list_cubit.dart';
 import '../cubit/movie_list_state.dart';
 import '../widgets/category_card.dart';
@@ -19,20 +20,41 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     // ✅ No BlocProvider here!
     // MovieListCubit is provided by the router (app_router.dart)
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(height: 16),
+            // Theme toggle button
+            Padding(
+              padding: const EdgeInsets.only(right: 16, top: 8),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  IconButton(
+                    icon: Icon(
+                      isDark ? Icons.light_mode : Icons.dark_mode,
+                      color: isDark ? Colors.white : Colors.black,
+                    ),
+                    onPressed: () {
+                      context.read<ThemeCubit>().toggleTheme();
+                    },
+                  ),
+                ],
+              ),
+            ),
+
+            const SizedBox(height: 8),
 
               // Title
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 24),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24),
                 child: Text(
                   'Search for a content',
                   style: TextStyle(
-                    color: Colors.white,
+                    color: Theme.of(context).textTheme.bodyLarge?.color,
                     fontSize: 18,
                     fontWeight: FontWeight.w600,
                   ),
@@ -50,12 +72,12 @@ class HomePage extends StatelessWidget {
               const SizedBox(height: 32),
 
               // Categories title
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 24),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24),
                 child: Text(
                   'Categories.',
                   style: TextStyle(
-                    color: Colors.white,
+                    color: Theme.of(context).textTheme.bodyLarge?.color,
                     fontSize: 18,
                     fontWeight: FontWeight.w600,
                   ),
@@ -99,12 +121,12 @@ class HomePage extends StatelessWidget {
               const SizedBox(height: 32),
 
               // Most searched title
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 24),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24),
                 child: Text(
                   'Most searched.',
                   style: TextStyle(
-                    color: Colors.white,
+                    color: Theme.of(context).textTheme.bodyLarge?.color,
                     fontSize: 18,
                     fontWeight: FontWeight.w600,
                   ),
@@ -126,7 +148,21 @@ class HomePage extends StatelessWidget {
                     }
 
                     if (state is MovieListLoaded) {
-                      return HorizontalMovieList(movies: state.movies);
+                      return HorizontalMovieList(
+                        movies: state.movies,
+                        hasMore: state.hasMore,
+                        onLoadMore: () {
+                          context.read<MovieListCubit>().loadMoreMovies();
+                        },
+                      );
+                    }
+
+                    if (state is MovieListLoadingMore) {
+                      return HorizontalMovieList(
+                        movies: state.currentMovies,
+                        hasMore: true,
+                        onLoadMore: () {},  // Already loading
+                      );
                     }
 
                     return const SizedBox();

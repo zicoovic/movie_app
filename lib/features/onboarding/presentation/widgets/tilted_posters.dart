@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'package:flutter/material.dart';
 
 /// TiltedPosters - 3D tilted movie posters effect

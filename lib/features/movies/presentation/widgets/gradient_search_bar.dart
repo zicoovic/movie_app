@@ -19,6 +19,8 @@ class GradientSearchBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Container(
       height: 56,
       decoration: BoxDecoration(
@@ -32,22 +34,24 @@ class GradientSearchBar extends StatelessWidget {
       child: Container(
         margin: const EdgeInsets.all(2), // Border width
         decoration: BoxDecoration(
-          color: AppColors.darkBackground,
+          color: Theme.of(context).scaffoldBackgroundColor,
           borderRadius: BorderRadius.circular(26),
         ),
         child: TextField(
           onChanged: onChanged,
           onTap: onTap,
-          style: const TextStyle(color: Colors.white),
+          style: TextStyle(
+            color: Theme.of(context).textTheme.bodyLarge?.color,
+          ),
           decoration: InputDecoration(
             hintText: 'Search for a content',
             hintStyle: TextStyle(
-              color: Colors.white.withOpacity(0.5),
+              color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.5),
               fontSize: 14,
             ),
-            prefixIcon: const Icon(
+            prefixIcon: Icon(
               Icons.search,
-              color: Colors.white54,
+              color: isDark ? Colors.white54 : Colors.black54,
             ),
             border: InputBorder.none,
             contentPadding: const EdgeInsets.symmetric(

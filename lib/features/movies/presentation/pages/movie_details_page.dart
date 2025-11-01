@@ -88,8 +88,8 @@ class MovieDetailsPage extends StatelessWidget {
                       Expanded(
                         child: Text(
                           movie.title,
-                          style: const TextStyle(
-                            color: Colors.white,
+                          style: TextStyle(
+                            color: Theme.of(context).textTheme.bodyLarge?.color,
                             fontSize: 28,
                             fontWeight: FontWeight.bold,
                           ),
@@ -104,8 +104,8 @@ class MovieDetailsPage extends StatelessWidget {
                   // Year and Studio (placeholder)
                   Text(
                     '${movie.releaseYear} · Marvel Studios',
-                    style: const TextStyle(
-                      color: Colors.white70,
+                    style: TextStyle(
+                      color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.7),
                       fontSize: 14,
                     ),
                   ),
@@ -113,10 +113,10 @@ class MovieDetailsPage extends StatelessWidget {
                   const SizedBox(height: 4),
 
                   // User count
-                  const Text(
+                  Text(
                     'From 342 users',
                     style: TextStyle(
-                      color: Colors.white54,
+                      color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.5),
                       fontSize: 12,
                     ),
                   ),
@@ -126,8 +126,8 @@ class MovieDetailsPage extends StatelessWidget {
                   // Description
                   Text(
                     movie.overview,
-                    style: const TextStyle(
-                      color: Colors.white70,
+                    style: TextStyle(
+                      color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.7),
                       fontSize: 14,
                       height: 1.6,
                     ),

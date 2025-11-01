@@ -18,7 +18,7 @@ class ApiConstants {
   static const String profileSize = 'w185';
 
   // Endpoints
-  static const String popularMovies = '/movie/popular';
+  static const String popularMovies = '/discover/movie'; // Changed to discover for better filtering
   static const String movieDetails = '/movie';
   static const String movieCredits = '/credits';
 

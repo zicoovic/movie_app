@@ -22,6 +22,12 @@ void main() async {
 class MainApp extends StatelessWidget {
   const MainApp({super.key});
 
+  // Get app title based on flavor
+  String get appTitle {
+    const flavor = String.fromEnvironment('FLAVOR', defaultValue: 'prod');
+    return flavor == 'dev' ? 'Movie App Dev' : 'Movie App';
+  }
+
   @override
   Widget build(BuildContext context) {
     // Provide ThemeCubit to the entire app
@@ -31,7 +37,7 @@ class MainApp extends StatelessWidget {
         builder: (context, themeMode) {
           return MaterialApp.router(
             debugShowCheckedModeBanner: false,
-            title: 'Movie App',
+            title: appTitle,
 
             // Use our custom themes
             theme: AppTheme.lightTheme,

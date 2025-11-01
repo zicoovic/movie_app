@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import '../../../../core/widgets/gradient_button.dart';
 import '../../domain/entities/movie.dart';
 import '../widgets/cast_list.dart';
 
@@ -32,33 +31,33 @@ class MovieDetailsPage extends StatelessWidget {
                 if (movie.fullBackdropUrl != null)
                   CachedNetworkImage(
                     imageUrl: movie.fullBackdropUrl!,
-                    height: 400,
+                    height: 500,
                     width: double.infinity,
                     fit: BoxFit.cover,
                     placeholder: (context, url) => Container(
-                      height: 400,
+                      height: 500,
                       color: Colors.grey[800],
                     ),
                     errorWidget: (context, url, error) => Container(
-                      height: 400,
+                      height: 500,
                       color: Colors.grey[800],
                     ),
                   )
                 else
                   Container(
-                    height: 400,
+                    height: 500,
                     color: Colors.grey[800],
                   ),
 
                 // Gradient overlay
                 Container(
-                  height: 400,
+                  height: 500,
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
                       colors: [
-                        Colors.transparent,
+                        Colors.black.withOpacity(0.3),
                         Colors.black.withOpacity(0.9),
                       ],
                     ),
@@ -74,6 +73,61 @@ class MovieDetailsPage extends StatelessWidget {
                     onPressed: () => Navigator.pop(context),
                   ),
                 ),
+
+                // Movie info overlaid on backdrop
+                Positioned(
+                  bottom: 24,
+                  left: 24,
+                  right: 24,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Title and Rating Row
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  movie.title,
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 32,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                const SizedBox(height: 8),
+                                Text(
+                                  '${movie.releaseYear}\nMarvel Studios',
+                                  style: TextStyle(
+                                    color: Colors.white.withOpacity(0.7),
+                                    fontSize: 14,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(width: 16),
+                          Column(
+                            children: [
+                              _buildRating(),
+                              const SizedBox(height: 4),
+                              const Text(
+                                'From 342 users',
+                                style: TextStyle(
+                                  color: Colors.white70,
+                                  fontSize: 11,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
               ],
             ),
 
@@ -82,46 +136,6 @@ class MovieDetailsPage extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Title row (with year and rating)
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          movie.title,
-                          style: TextStyle(
-                            color: Theme.of(context).textTheme.bodyLarge?.color,
-                            fontSize: 28,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                      _buildRating(),
-                    ],
-                  ),
-
-                  const SizedBox(height: 8),
-
-                  // Year and Studio (placeholder)
-                  Text(
-                    '${movie.releaseYear} · Marvel Studios',
-                    style: TextStyle(
-                      color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.7),
-                      fontSize: 14,
-                    ),
-                  ),
-
-                  const SizedBox(height: 4),
-
-                  // User count
-                  Text(
-                    'From 342 users',
-                    style: TextStyle(
-                      color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.5),
-                      fontSize: 12,
-                    ),
-                  ),
-
-                  const SizedBox(height: 24),
 
                   // Description
                   Text(
@@ -140,14 +154,45 @@ class MovieDetailsPage extends StatelessWidget {
 
                   const SizedBox(height: 32),
 
-                  // Watch button
+                  // Watch button with gradient border
                   Center(
-                    child: GradientButton(
-                      text: 'Watch now',
+                    child: Container(
                       width: 200,
-                      onPressed: () {
-                        // TODO: Play movie
-                      },
+                      height: 50,
+                      decoration: BoxDecoration(
+                        gradient: const LinearGradient(
+                          colors: [Color(0xFF00BCD4), Color(0xFF9C27B0)],
+                          begin: Alignment.centerLeft,
+                          end: Alignment.centerRight,
+                        ),
+                        borderRadius: BorderRadius.circular(25),
+                      ),
+                      child: Container(
+                        margin: const EdgeInsets.all(2),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF1A1A1A),
+                          borderRadius: BorderRadius.circular(23),
+                        ),
+                        child: Material(
+                          color: Colors.transparent,
+                          child: InkWell(
+                            borderRadius: BorderRadius.circular(23),
+                            onTap: () {
+                              // Play movie
+                            },
+                            child: const Center(
+                              child: Text(
+                                'Watch now',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
                     ),
                   ),
                 ],

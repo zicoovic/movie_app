@@ -1,0 +1,59 @@
+name: Flutter CI/CD
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  test:
+    name: Test and Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.24.5'
+          channel: 'stable'
+          cache: true
+
+      - name: Get dependencies
+        run: flutter pub get
+
+      - name: Verify formatting
+        run: dart format --output=none --set-exit-if-changed .
+
+      - name: Analyze code
+        run: flutter analyze
+
+      - name: Run tests
+        run: flutter test --coverage
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          files: ./coverage/lcov.info
+          fail_ci_if_error: false
+
+      - name: Build APK (Dev)
+        run: flutter build apk --flavor dev --debug
+
+      - name: Build APK (Prod)
+        run: flutter build apk --flavor prod --release
+
+      - name: Upload Dev APK
+        uses: actions/upload-artifact@v3
+        with:
+          name: movie-app-dev
+          path: build/app/outputs/flutter-apk/app-dev-debug.apk
+
+      - name: Upload Prod APK
+        uses: actions/upload-artifact@v3
+        with:
+          name: movie-app-prod
+          path: build/app/outputs/flutter-apk/app-prod-release.apk

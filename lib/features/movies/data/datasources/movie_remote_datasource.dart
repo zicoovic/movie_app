@@ -25,6 +25,8 @@ class MovieRemoteDataSourceImpl implements MovieRemoteDataSource {
         queryParameters: {
           'page': page,
           'api_key': ApiConstants.apiKey,
+          'with_genres': '16', // 16 = Animation (anime/cartoons)
+          'sort_by': 'popularity.desc', // Sort by most popular
         },
       );
 

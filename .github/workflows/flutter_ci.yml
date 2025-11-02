@@ -35,7 +35,7 @@ jobs:
         run: flutter test --coverage
 
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v4
         with:
           files: ./coverage/lcov.info
           fail_ci_if_error: false
@@ -47,13 +47,13 @@ jobs:
         run: flutter build apk --flavor prod --release
 
       - name: Upload Dev APK
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: movie-app-dev
           path: build/app/outputs/flutter-apk/app-dev-debug.apk
 
       - name: Upload Prod APK
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: movie-app-prod
           path: build/app/outputs/flutter-apk/app-prod-release.apk

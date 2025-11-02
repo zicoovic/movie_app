@@ -14,7 +14,8 @@ abstract class Failure extends Equatable {
 
 // When API/server has a problem
 class ServerFailure extends Failure {
-  const ServerFailure([super.message = 'Something went wrong. Please try again.']);
+  const ServerFailure(
+      [super.message = 'Something went wrong. Please try again.']);
 }
 
 // When there's no internet

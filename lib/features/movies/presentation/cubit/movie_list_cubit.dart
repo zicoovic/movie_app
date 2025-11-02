@@ -51,7 +51,8 @@ class MovieListCubit extends Cubit<MovieListState> {
     emit(MovieListLoadingMore(_allMovies));
 
     final nextPage = _currentPage + 1;
-    final result = await getPopularMovies(GetPopularMoviesParams(page: nextPage));
+    final result =
+        await getPopularMovies(GetPopularMoviesParams(page: nextPage));
 
     result.fold(
       (failure) => emit(MovieListError(failure.message)),

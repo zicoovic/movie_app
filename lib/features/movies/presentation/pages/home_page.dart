@@ -202,8 +202,7 @@ class _HomePageState extends State<HomePage> {
                   );
                 }
 
-                if (state is MovieListLoaded ||
-                    state is MovieListLoadingMore) {
+                if (state is MovieListLoaded || state is MovieListLoadingMore) {
                   final movies = state is MovieListLoaded
                       ? state.movies
                       : (state as MovieListLoadingMore).currentMovies;

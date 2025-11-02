@@ -14,10 +14,8 @@ class CastList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: cast
-          .take(4)
-          .map((member) => _CastItem(member: member))
-          .toList(),
+      children:
+          cast.take(4).map((member) => _CastItem(member: member)).toList(),
     );
   }
 }

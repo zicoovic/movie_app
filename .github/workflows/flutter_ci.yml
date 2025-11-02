@@ -35,13 +35,13 @@ jobs:
       run: flutter test
 
     - name: Build APK
-      run: flutter build apk --release
+      run: flutter build apk --release --flavor prod
 
     - name: Upload APK to Artifacts
       uses: actions/upload-artifact@v4
       with:
         name: app-release-apk
-        path: build/app/outputs/flutter-apk/app-release.apk
+        path: build/app/outputs/flutter-apk/app-prod-release.apk
         retention-days: 30
 
     - name: Setup Node.js
@@ -67,7 +67,7 @@ jobs:
         GOOGLE_APPLICATION_CREDENTIALS: ${{ github.workspace }}/gcloud-service-key.json
       run: |
         echo '${{ secrets.FIREBASE_SERVICE_ACCOUNT }}' > gcloud-service-key.json
-        firebase appdistribution:distribute build/app/outputs/flutter-apk/app-release.apk \
+        firebase appdistribution:distribute build/app/outputs/flutter-apk/app-prod-release.apk \
           --app 1:977811551855:android:8897af1ee365c44c037f9a \
           --groups "testers" \
           --release-notes "New build from ${{ github.ref_name }} - ${{ github.event.head_commit.message }}"

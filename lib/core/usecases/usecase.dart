@@ -10,7 +10,7 @@ import '../error/failures.dart';
 /// [Params] is the parameters needed to execute the use case
 abstract class UseCase<T, Params> {
   /// Execute the use case
-  /// Returns Either<Failure, T>
+  /// Returns Either with Failure or T
   /// - Left: Failure (error case)
   /// - Right: T (success case)
   Future<Either<Failure, T>> call(Params params);

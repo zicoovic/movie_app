@@ -16,7 +16,7 @@ abstract class MovieRepository {
   ///
   /// Returns Either:
   /// - Left (Failure) if something goes wrong
-  /// - Right (List<Movie>) if successful
+  /// - Right (List of Movie) if successful
   ///
   /// [page] - Page number (1, 2, 3...)
   Future<Either<Failure, List<Movie>>> getPopularMovies({

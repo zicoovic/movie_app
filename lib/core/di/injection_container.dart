@@ -61,6 +61,6 @@ Future<void> setupDependencies() async {
   // Cubits are factories (new instance each time)
 
   getIt.registerFactory(() => MovieListCubit(
-    getPopularMovies: getIt<GetPopularMovies>(),
-  ));
+        getPopularMovies: getIt<GetPopularMovies>(),
+      ));
 }

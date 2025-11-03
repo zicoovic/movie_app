@@ -19,7 +19,8 @@ class GetPopularMovies implements UseCase<List<Movie>, GetPopularMoviesParams> {
   GetPopularMovies(this.repository);
 
   @override
-  Future<Either<Failure, List<Movie>>> call(GetPopularMoviesParams params) async {
+  Future<Either<Failure, List<Movie>>> call(
+      GetPopularMoviesParams params) async {
     return await repository.getPopularMovies(page: params.page);
   }
 }

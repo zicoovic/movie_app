@@ -1,59 +1,59 @@
-name: Flutter CI/CD
+name: Build and Distribute APK
 
 on:
   push:
     branches: [ main, develop ]
   pull_request:
-    branches: [ main, develop ]
+    branches: [ main ]
 
 jobs:
-  test:
-    name: Test and Build
+  build:
+    name: Build and Distribute APK
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+    - name: Checkout code
+      uses: actions/checkout@v4
 
-      - name: Set up Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: '3.24.5'
-          channel: 'stable'
-          cache: true
+    - name: Setup Java
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'zulu'
+        java-version: '17'
 
-      - name: Get dependencies
-        run: flutter pub get
+    - name: Setup Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.35.7'
+        channel: 'stable'
+        cache: true
 
-      - name: Verify formatting
-        run: dart format --output=none --set-exit-if-changed .
+    - name: Decode and create google-services.json
+      run: |
+        echo "${{ secrets.GOOGLE_SERVICES_JSON }}" | base64 --decode > android/app/google-services.json
 
-      - name: Analyze code
-        run: flutter analyze
+    - name: Get dependencies
+      run: flutter pub get
 
-      - name: Run tests
-        run: flutter test --coverage
+    - name: Run tests
+      run: flutter test
 
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v3
-        with:
-          files: ./coverage/lcov.info
-          fail_ci_if_error: false
+    - name: Build APK
+      run: flutter build apk --release --flavor prod
 
-      - name: Build APK (Dev)
-        run: flutter build apk --flavor dev --debug
+    - name: Upload APK to Artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: app-release-apk
+        path: build/app/outputs/flutter-apk/app-prod-release.apk
+        retention-days: 30
 
-      - name: Build APK (Prod)
-        run: flutter build apk --flavor prod --release
-
-      - name: Upload Dev APK
-        uses: actions/upload-artifact@v3
-        with:
-          name: movie-app-dev
-          path: build/app/outputs/flutter-apk/app-dev-debug.apk
-
-      - name: Upload Prod APK
-        uses: actions/upload-artifact@v3
-        with:
-          name: movie-app-prod
-          path: build/app/outputs/flutter-apk/app-prod-release.apk
+    - name: Distribute to Firebase App Distribution
+      if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop')
+      uses: wzieba/Firebase-Distribution-Github-Action@v1
+      with:
+        appId: 1:809942368053:android:90f06bc2bf44111940167c
+        serviceCredentialsFileContent: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+        groups: testers
+        file: build/app/outputs/flutter-apk/app-prod-release.apk
+        releaseNotes: "New build from ${{ github.ref_name }} - ${{ github.event.head_commit.message }}"

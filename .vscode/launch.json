@@ -9,7 +9,8 @@
             "args": [
                 "--flavor",
                 "dev",
-                "--dart-define=FLAVOR=dev"
+                "--dart-define=FLAVOR=dev",
+                "--dart-define=TMDB_API_KEY=29501a0da4990b898ff159bde85192f4"
             ]
         },
         {
@@ -20,7 +21,8 @@
             "args": [
                 "--flavor",
                 "prod",
-                "--dart-define=FLAVOR=prod"
+                "--dart-define=FLAVOR=prod",
+                "--dart-define=TMDB_API_KEY=29501a0da4990b898ff159bde85192f4"
             ]
         },
         {
@@ -32,6 +34,7 @@
                 "--flavor",
                 "dev",
                 "--dart-define=FLAVOR=dev",
+                "--dart-define=TMDB_API_KEY=29501a0da4990b898ff159bde85192f4",
                 "--profile"
             ]
         },
@@ -44,6 +47,7 @@
                 "--flavor",
                 "prod",
                 "--dart-define=FLAVOR=prod",
+                "--dart-define=TMDB_API_KEY=29501a0da4990b898ff159bde85192f4",
                 "--release"
             ]
         }

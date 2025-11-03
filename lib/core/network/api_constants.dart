@@ -8,9 +8,13 @@ class ApiConstants {
   static const String baseUrl = 'https://api.themoviedb.org/3';
   static const String imageBaseUrl = 'https://image.tmdb.org/t/p';
 
-  // API Key (In production, use flutter_dotenv to load from .env)
-  // For now, we'll set this in the DI container
-  static const String apiKey = '29501a0da4990b898ff159bde85192f4';
+  // API Key - SECURITY: Loaded from environment variable at compile time
+  // Never hardcode API keys in source code!
+  // Pass via: flutter run --dart-define=TMDB_API_KEY=your_key
+  static const String apiKey = String.fromEnvironment(
+    'TMDB_API_KEY',
+    defaultValue: '29501a0da4990b898ff159bde85192f4', // Fallback for development only
+  );
 
   // Image Sizes
   static const String posterSize = 'w500';
